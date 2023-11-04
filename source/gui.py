@@ -36,7 +36,7 @@ class GUI(QObject):
         self._gitCommit = None
         self._triedGitInit = False
         self._updating = False
-        #self.getVersionInfo()
+        self.getVersionInfo()
 
         self.conn = None
         self.populateDatabase()
