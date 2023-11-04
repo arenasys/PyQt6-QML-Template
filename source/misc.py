@@ -29,7 +29,7 @@ try:
                     ("wReserved3", wintypes.USHORT),
                     ("pszVal", wintypes.LPWSTR)]
 
-    class IpyqtPropertyStoreVtbl(ctypes.Structure):
+    class IPropertyStoreVtbl(ctypes.Structure):
         _fields_ = [
             ('QueryInterface', ctypes.CFUNCTYPE(ctypes.HRESULT, ctypes.c_void_p, ctypes.POINTER(GUID), ctypes.POINTER(ctypes.c_void_p))),
             ('AddRef', ctypes.CFUNCTYPE(ctypes.c_ulong, ctypes.c_void_p)),
@@ -41,13 +41,13 @@ try:
             ('Commit', ctypes.CFUNCTYPE(ctypes.HRESULT, ctypes.c_void_p))
         ]
 
-    class IpyqtPropertyStore(ctypes.Structure):
-        _fields_ = [('lpVtbl', ctypes.POINTER(IpyqtPropertyStoreVtbl))]
+    class IPropertyStore(ctypes.Structure):
+        _fields_ = [('lpVtbl', ctypes.POINTER(IPropertyStoreVtbl))]
 
-    ctypes.windll.shell32.SHGetpyqtPropertyStoreForWindow.restype = ctypes.HRESULT
-    ctypes.windll.shell32.SHGetpyqtPropertyStoreForWindow.argtypes = [wintypes.HWND, ctypes.POINTER(GUID), ctypes.POINTER(ctypes.POINTER(IpyqtPropertyStore))]
+    ctypes.windll.shell32.SHGetPropertyStoreForWindow.restype = ctypes.HRESULT
+    ctypes.windll.shell32.SHGetPropertyStoreForWindow.argtypes = [wintypes.HWND, ctypes.POINTER(GUID), ctypes.POINTER(ctypes.POINTER(IPropertyStore))]
 
-    IID_IpyqtPropertyStore = (GUID)(*bytearray.fromhex("eb8e6d88f28c46448d02cdba1dbdcf99"))
+    IID_IPropertyStore = (GUID)(*bytearray.fromhex("eb8e6d88f28c46448d02cdba1dbdcf99"))
     PKEY_AppUserModel = (GUID)(*bytearray.fromhex("55284c9f799f394ba8d0e1d42de1d5f3"))
 except:
     pass
@@ -165,8 +165,8 @@ def showFilesInExplorer(folder, files):
 def setWindowProperties(hwnd, app_id, display_name, relaunch_path):
     ctypes.windll.ole32.CoInitialize(None)
 
-    prop_store = ctypes.POINTER(IpyqtPropertyStore)()
-    result = ctypes.windll.shell32.SHGetpyqtPropertyStoreForWindow(int(hwnd), IID_IpyqtPropertyStore, ctypes.pointer(prop_store))
+    prop_store = ctypes.POINTER(IPropertyStore)()
+    result = ctypes.windll.shell32.SHGetPropertyStoreForWindow(int(hwnd), IID_IPropertyStore, ctypes.pointer(prop_store))
     if result != 0:
         return False
     functions = prop_store.contents.lpVtbl.contents
