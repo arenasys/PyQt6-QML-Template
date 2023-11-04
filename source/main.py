@@ -130,10 +130,6 @@ class Coordinator(QObject):
 
         qmlRegisterSingletonType(Coordinator, "gui", 1, 0, lambda qml, js: self, "COORDINATOR")
 
-    @pyqtProperty(list, constant=True)
-    def modes(self):
-        return ["Nvidia", "AMD", "Remote"]
-
     @pyqtProperty(list, notify=updated)
     def packages(self):
         return self.getNeeded()
